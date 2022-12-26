@@ -7,7 +7,6 @@
 #include <QDebug>
 #include <QQueue>
 #include <QMutex>
-#include <iterator>
 #include <utility>
 
 bool Solver::solveSudoku(QVector<QVector<char>> board_values)
@@ -45,7 +44,6 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
     {
         bool check = true;
         bool check2 = false;
-        bool check3 = false;
 
         for(int i = 0; i < remove_indexes.size(); i++)
         {
@@ -54,7 +52,7 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
             remove_indexes.pop_front();
         }
 
-        size_t empty_spots_size = empty_spots.size();
+        int empty_spots_size = empty_spots.size();
         candidates.resize(empty_spots_size);
 
         //One Candidate Possibility
@@ -68,12 +66,10 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
                     candidate_list.insert(char('0' + n));
                 }
             }
-            qDebug() << candidate_list;
             candidates[i] = candidate_list;
 
             if(candidate_list.isEmpty())
             {
-                qDebug() << i;
                 return false;
             }
 
@@ -86,7 +82,6 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
                 squares[Board::getSquare(empty_spots[i])].insert(val);
                 remove_indexes.push_back(i);
                 check = false;
-                printBoard(*board);
                 emit solvedSquare();
                 break;
             }
@@ -131,7 +126,6 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
                     columns[empty_spots[i].second].insert(val);
                     squares[Board::getSquare(empty_spots[i])].insert(val);
                     remove_indexes.push_back(i);
-                    printBoard(*board);
                     emit solvedSquare();
                     break;
                 }
@@ -144,7 +138,6 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
                     columns[empty_spots[i].second].insert(val);
                     squares[Board::getSquare(empty_spots[i])].insert(val);
                     remove_indexes.push_back(i);
-                    printBoard(*board);
                     emit solvedSquare();
                     break;
                 }
@@ -157,7 +150,6 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
                     columns[empty_spots[i].second].insert(val);
                     squares[Board::getSquare(empty_spots[i])].insert(val);
                     remove_indexes.push_back(i);
-                    printBoard(*board);
                     emit solvedSquare();
                     break;
                 }
@@ -173,13 +165,11 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
                     char val = *candidates[i].begin();
                     QVector<QVector<char>> board_copy = *board;
                     board_copy[empty_spots[i].first][empty_spots[i].second] = val;
-                    qDebug() << val;
-                    printBoard(board_copy);
                     auto *new_solve = new Solver();
                     if (new_solve->solveSudoku(board_copy))
                     {
                         board = new QVector<QVector<char>>(new_solve->getBoard());
-                        printBoard(*board);
+                        emit solvedSquare();
                         return true;
                     }
                     else
@@ -190,7 +180,6 @@ bool Solver::solveSudoku(QVector<QVector<char>> board_values)
                         columns[empty_spots[i].second].insert(val);
                         squares[Board::getSquare(empty_spots[i])].insert(val);
                         remove_indexes.push_back(i);
-                        printBoard(*board);
                         emit solvedSquare();
                         break;
                     }
@@ -216,16 +205,4 @@ bool Solver::isFull(QVector<QVector<char>> board)
     return true;
 }
 
-void Solver::printBoard(QVector<QVector<char>> board)
-{
-    for(int i = 0; i < board.size(); i++)
-    {
-        for(int j = 0; j < board[i].size(); j++)
-        {
-            cout << board[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
 

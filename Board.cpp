@@ -5,11 +5,10 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QIntValidator>
-#include <QStackedLayout>
 #include <QPushButton>
 #include <QPalette>
-#include <QFuture>
 #include <QtConcurrent>
+#include <utility>
 #include "Board.h"
 #include "Solver.h"
 
@@ -20,20 +19,17 @@ int Board::getSquare(QPair<int, int> loc)
 
 Board::Board(QVector<QVector<char>> b, QWidget *parent)
 {
-    board_values = b;
-    solved_board = b;
-
+    board_values = std::move(b);
     board_widget = drawBoard(board_values);
 
-    Solver *solver = new Solver();
+    auto *solver = new Solver();
     connect(solver, &Solver::solvedSquare, this, [solver, this]()
     {
         this->solved_board = solver->getBoard();
     });
-    future = QtConcurrent::run(solver, &Solver::solveSudoku, solved_board);
-    future.waitForFinished();
+    solver->solveSudoku(board_values);
 
-    QPushButton *solve_button = new QPushButton("Solve");
+    auto *solve_button = new QPushButton("Solve");
     connect(solve_button, &QPushButton::clicked, [this]()
     {
         QWidget *prev_widget = this->board_widget;
@@ -44,7 +40,7 @@ Board::Board(QVector<QVector<char>> b, QWidget *parent)
     solve_button->setFixedSize(board_widget->width() - 140, 60);
 
     this->setFixedSize(board_widget->width() - 120, board_widget->height() + solve_button->height());
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    auto *layout = new QVBoxLayout(this);
     layout->addWidget(board_widget);
     layout->addWidget(solve_button);
 }
@@ -69,7 +65,6 @@ QWidget* Board::drawBoard(QVector<QVector<char>> board)
             {
                 boxes[i][j]->setText(QString(board[i][j]));
                 boxes[i][j]->setReadOnly(true);
-
             }
 
             board_layout->addWidget(boxes[i][j], i, j);
@@ -88,13 +83,6 @@ Board::Board(QWidget *parent)
 {
     board_values = QVector<QVector<char>>(9, QVector<char>(9, '.'));
     board_widget = drawBoard(board_values);
-
-
-//    connect(solver, &Solver::solvedSquare, this, [solver, this]()
-//    {
-//        this->solved_board = solver->getBoard();
-//    });
-//    future = QtConcurrent::run(solver, &Solver::solveSudoku, solved_board);
 
     QPushButton *solve_button = new QPushButton("Solve");
     connect(solve_button, &QPushButton::clicked, [this]()

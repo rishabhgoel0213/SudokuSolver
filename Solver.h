@@ -25,7 +25,6 @@ signals:
 
 private:
     static bool isFull(QVector<QVector<char>> board);
-    static void printBoard(QVector<QVector<char>> board);
 
     QVector<QVector<char>> *board;
 

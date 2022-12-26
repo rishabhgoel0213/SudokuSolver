@@ -34,7 +34,7 @@ private:
     QFuture<void> future;
 
     QWidget *board_widget;
-    QLineEdit *boxes[9][9];
+    QLineEdit *boxes[9][9]{};
 
 
 };
