@@ -18,7 +18,6 @@ class Board: public QWidget
     Q_OBJECT
 
 public:
-    ~Board() override;
     explicit Board(QWidget *parent = nullptr);
     explicit Board(QVector<QVector<char>> b, QWidget *parent = nullptr);
     static int getSquare(QPair<int, int> loc);
@@ -30,8 +29,6 @@ private:
 
     QVector<QVector<char>> board_values;
     QVector<QVector<char>> solved_board;
-
-    QFuture<void> future;
 
     QWidget *board_widget;
     QLineEdit *boxes[9][9]{};

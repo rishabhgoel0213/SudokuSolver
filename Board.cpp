@@ -74,10 +74,6 @@ QWidget* Board::drawBoard(QVector<QVector<char>> board)
     return new_board_widget;
 }
 
-Board::~Board()
-{
-    future.waitForFinished();
-}
 
 Board::Board(QWidget *parent)
 {
