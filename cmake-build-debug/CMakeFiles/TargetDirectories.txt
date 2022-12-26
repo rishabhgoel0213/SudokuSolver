@@ -1,5 +1,0 @@
-/home/rishabh/CLionProjects/SudokuGame/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/rishabh/CLionProjects/SudokuGame/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/rishabh/CLionProjects/SudokuGame/cmake-build-debug/CMakeFiles/SudokuGame.dir
-/home/rishabh/CLionProjects/SudokuGame/cmake-build-debug/CMakeFiles/SudokuGame_autogen_timestamp_deps.dir
-/home/rishabh/CLionProjects/SudokuGame/cmake-build-debug/CMakeFiles/SudokuGame_autogen.dir
